@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Phiếu khảo sát hài lòng – Phòng QL XNC, Công an tỉnh Thái Nguyên</title>
+<style>:root{--bg:#0b0d12;--card:#11141a;--text:#e5e7eb;--muted:#94a3b8;--accent:#22d3ee}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+.wrap{max-width:860px;margin:24px auto;padding:16px}.card{background:var(--card);border:1px solid #1f2733;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);padding:20px}
+h1{font-size:22px;margin:0 0 6px 0} h2{font-size:16px;color:var(--muted);margin:0 0 16px 0}
+label{display:block;margin:10px 0 6px 0;color:var(--muted);font-size:14px}
+input[type=text],select,textarea{width:100%;padding:12px 14px;border:1px solid #334155;background:#0e1218;color:#e5e7eb;border-radius:12px;outline:none}
+textarea{min-height:110px;resize:vertical}.row{display:flex;gap:12px;flex-wrap:wrap}.col{flex:1 1 280px;min-width:260px}
+.group{padding:12px;border:1px dashed #2a3342;border-radius:12px;margin-bottom:10px;background:#0d1117}
+.opts{display:flex;gap:10px;flex-wrap:wrap;margin-top:4px}.opt{display:flex;gap:6px;align-items:center;background:#0e1218;border:1px solid #334155;border-radius:12px;padding:8px 10px}
+.opt input{accent-color:#22d3ee}.btn{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#042a2f;border:0;border-radius:12px;padding:12px 16px;font-weight:700;cursor:pointer}
+.note{color:var(--muted);font-size:13px}.center{text-align:center}.success,.error{display:none;margin-top:12px;padding:12px 14px;border-radius:12px}
+.success{border:1px solid #1f5136;background:#0b2e22;color:#b7f4d8}.error{border:1px solid #581a1a;background:#2a0f10;color:#fecaca}</style>
+</head>
+<body><div class="wrap"><div class="card">
+<h1>THÔNG TIN KHẢO SÁT</h1>
+<h2>Sự hài lòng khi thực hiện thủ tục hành chính tại <strong>Phòng Quản lý Xuất nhập cảnh – Công an tỉnh Thái Nguyên</strong></h2>
+<p class="note">Vui lòng chọn một phương án ở mỗi câu: <strong>Hài lòng</strong> / <strong>Bình thường</strong> / <strong>Không hài lòng</strong>.</p>
+<form id="form">
+<div class="row"><div class="col">
+<label for="donvi">Đơn vị tiếp nhận</label>
+<input id="donvi" name="donvi" type="text" value="Phòng Quản lý Xuất nhập cảnh – Công an tỉnh Thái Nguyên" required>
+</div><div class="col">
+<label for="ngay">Ngày giao dịch</label>
+<input id="ngay" name="ngay" type="text" placeholder="dd/mm/yyyy" required>
+</div></div>
+<div id="questions"></div>
+<div class="group"><label for="lydo_khonghailong">Nếu chọn 'Không hài lòng', vui lòng cho biết lý do</label>
+<textarea id="lydo_khonghailong" name="lydo_khonghailong" placeholder="Ví dụ: khó tra cứu thủ tục, thời gian chờ lâu, hồ sơ phải bổ sung nhiều lần, ..."></textarea></div>
+<div class="group"><label for="ykien">Ý kiến khác</label><textarea id="ykien" name="ykien" placeholder="Các góp ý khác (nếu có)"></textarea></div>
+<div class="group"><label for="dexuat">Đề xuất, kiến nghị</label><textarea id="dexuat" name="dexuat" placeholder="Đề xuất để nâng cao chất lượng phục vụ"></textarea></div>
+<div class="row"><div class="col"><label for="hoten">Họ tên (không bắt buộc)</label><input id="hoten" name="hoten" type="text" placeholder="Nguyễn Văn A"></div>
+<div class="col"><label for="sdt">Số điện thoại (không bắt buộc)</label><input id="sdt" name="sdt" type="text" placeholder="0xxxxxxxxx"></div></div>
+<div class="center" style="margin-top:14px"><button id="submitBtn" class="btn" type="submit">Gửi phiếu</button></div>
+<div id="ok" class="success">Cảm ơn anh/chị! Phản hồi đã được ghi nhận.</div>
+<div id="err" class="error">Xin lỗi, hệ thống tạm thời lỗi. Vui lòng thử lại.</div>
+</form><p class="note">Khi gửi, dữ liệu được lưu vào Google Sheets của đơn vị. Không thu thập dữ liệu nhạy cảm.</p>
+</div></div>
+<script>
+const ENDPOINT = "https://script.google.com/macros/s/AKfycbwzGVl3RBf_6gOJ_Ot9ggedv8cx5Xj5KAN29IAp9nBt-JQK84MJfKF-9jDMDTVJWsdP9A/exec";
+const QUESTIONS = [
+  { id:'cau1', text:'Câu 1. Niêm yết, công khai thủ tục hành chính, phí/lệ phí tại Bộ phận một cửa', req:true },
+  { id:'cau2', text:'Câu 2. Thái độ, hướng dẫn của cán bộ tiếp nhận hồ sơ', req:true },
+  { id:'cau3', text:'Câu 3. Thời gian chờ đợi và giải quyết thủ tục', req:true },
+  { id:'cau4', text:'Câu 4. Kết quả giải quyết (đúng hạn, đúng quy định, đúng yêu cầu)', req:true },
+  { id:'cau5', text:'Câu 5. Cơ sở vật chất, điều kiện phục vụ (số thứ tự, chỗ ngồi, vệ sinh, ...)', req:true },
+  { id:'cau6', text:'Câu 6. Công tác tiếp nhận, xử lý phản ánh/kiến nghị của tổ chức, công dân', req:true },
+];
+const qWrap = document.getElementById('questions');
+function renderQuestions(){
+  const opts=[{v:'Hài lòng',t:'Hài lòng'},{v:'Bình thường',t:'Bình thường'},{v:'Không hài lòng',t:'Không hài lòng'}];
+  QUESTIONS.forEach(q=>{const div=document.createElement('div');div.className='group';
+    const lab=document.createElement('label');lab.textContent=q.text;div.appendChild(lab);
+    const optDiv=document.createElement('div');optDiv.className='opts';
+    opts.forEach((o,i)=>{const w=document.createElement('label');w.className='opt';
+      const input=document.createElement('input');input.type='radio';input.name=q.id;input.value=o.v;if(q.req&&i===0)input.required=true;
+      w.appendChild(input);const span=document.createElement('span');span.textContent=o.t;w.appendChild(span);optDiv.appendChild(w);});
+    div.appendChild(optDiv);qWrap.appendChild(div);});}
+renderQuestions();
+const form=document.getElementById('form');const ok=document.getElementById('ok');const err=document.getElementById('err');const btn=document.getElementById('submitBtn');
+function formatDate(dstr){if(!dstr)return"";if(/\d{2}\/\d{2}\/\d{4}/.test(dstr))return dstr;const d=new Date(dstr);if(!isNaN(d)){const dd=String(d.getDate()).padStart(2,'0');const mm=String(d.getMonth()+1).padStart(2,'0');const yyyy=d.getFullYear();return dd+'/'+mm+'/'+yyyy}return dstr;}
+form.addEventListener('submit',async e=>{e.preventDefault();if(!ENDPOINT||ENDPOINT.includes("PASTE_YOUR_SCRIPT_URL_HERE")){alert("Chưa cấu hình ENDPOINT (URL Apps Script). Vui lòng xem README.");return;}
+  btn.disabled=true;ok.style.display='none';err.style.display='none';
+  const data=new FormData(form);const payload=Object.fromEntries(data.entries());
+  QUESTIONS.forEach(q=>{const val=form.querySelector(`input[name="${q.id}"]:checked`)?.value||'';payload[q.id]=val;});
+  payload.ua=navigator.userAgent;payload.ts=new Date().toISOString();payload.ngay=formatDate(payload.ngay);
+  try{const res=await fetch(ENDPOINT,{method:'POST',mode:'cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+    if(res.ok){ok.style.display='block';form.reset();}else{throw new Error(await res.text());}}
+  catch(e){console.error(e);err.style.display='block';}finally{btn.disabled=false;}
+});</script></body></html>
